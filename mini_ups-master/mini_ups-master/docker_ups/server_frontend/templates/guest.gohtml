@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+
+<p>Enter your tracking number</p>
+<form method="post">
+
+    <input type="number" name="tracking" placeholder="tracking number"><br>
+    <input type="submit">
+
+</form>
+
+{{if .PackageID}}
+PackageID {{.PackageID}}<br>
+Status {{.Status}}<br>
+CreatedAt {{.CreatedAt}}<br>
+UpdatedAt {{.UpdatedAt}}<br>
+Location {{.X}} {{.Y}}<br>
+Wharehouse {{.WhID}}<br>
+TruckID {{.TruckID}}<br>
+Username {{.UserUsername}}<br>
+{{end}}
+
+</body>
+</html>

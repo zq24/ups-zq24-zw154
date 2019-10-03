@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>mini-UPS</title>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+
+        }
+        th, td {
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .button {
+            font: bold 11px Arial;
+            text-decoration: none;
+            background-color: #EEEEEE;
+            color: #333333;
+            padding: 2px 6px 2px 6px;
+            border-top: 1px solid #CCCCCC;
+            border-right: 1px solid #333333;
+            border-bottom: 1px solid #333333;
+            border-left: 1px solid #CCCCCC;
+        }
+
+        a {
+            margin-top: 50px;
+            background-color: red;
+            box-shadow: 0 5px 0 darkred;
+            color: white;
+            padding: 0.5em 1.5em;
+            position: relative;
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+
+        a:hover {
+            background-color: #ce0606;
+            cursor: pointer;
+        }
+
+        a:active {
+            box-shadow: none;
+            top: 5px;
+        }
+        body {
+            background: url("http://redpithemes.com/Documentation/assets/img/page_bg/page_bg_blur02.jpg");
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+
+
+    </style>
+</head>
+<body>
+{{if .Username }}
+Hi, {{.Username}}
+    <br>
+<h3><a href="/logout">log out</a></h3>
+<br>
+<table style="width:100%">
+    <tr>
+        <th>Package ID</th>
+        <th>Status</th>
+        <th>Destination</th>
+        <th>Created At</th>
+        <th>Updated At</th>
+        <th>WharehouseID</th>
+        <th>TruckID</th>
+        <th>Action</th>
+    </tr>
+
+    {{if .Pkgs}}
+        {{- range .Pkgs }}
+            <tr align="center">
+
+{{/*                <td id="pkgid">{{.PackageID}}</td>*/}}
+                <td>{{.PackageID}}</td>
+                <td>{{.Status}}</td>
+                <td>({{.X }},{{.Y}})</td>
+                <td>{{.CreatedAt}}</td>
+                <td>{{.UpdatedAt}}</td>
+                <td>{{.WhID}}</td>
+                <td>{{.TruckID}}</td>
+                <td>
+                    {{if .Delivered}}
+                        <p>No actions available</p >
+                    {{else}}
+                                <button onclick="window.location='/modifydestination?packageid='+{{.PackageID}}">Edit</button>
+{{/*                                <a href="/currentLocation" class="button">Package's Current Location</a >*/}}
+                    {{end}}
+                </td>
+            </tr>
+        {{- end}}
+    {{- end}}
+</table>
+
+
+{{else}}
+    <h3><a href="/signup">sign up</a></h3>
+    <br>
+    <h3><a href="/login" >log in</a></h3>
+{{end}}
+
+<br>
+
+{{if  not .Username}}
+    <h3><a href="/guest">Track Your Package as Guest</a ></h3>
+{{end}}
+
+
+
+</body>
+</html>

@@ -1,0 +1,65 @@
+version: "2"
+services:
+#  ###############################world && world db#########################
+  mydb:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: abc123
+      POSTGRES_USER: postgres
+      POSTGRES_DB: worldSim
+    restart: always
+  server:
+    build: ./world_simulator/
+    command: bash -c "sleep 5; ./wait-for-it.sh mydb:5432 --strict -- ./server 12345 23456 0"
+    ports:
+      - "12345:12345"
+      - "23456:23456"
+    depends_on:
+      - mydb
+#################################ups######################################
+  db:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: 12345
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+    restart: always
+    ports:
+      - "10001:5432"
+    volumes:
+      - "./initdb:/docker-entrypoint-initdb.d:ro" #   https://stackoverflow.com/questions/33309121/using-docker-compose-to-create-tables-in-postgresql-database
+
+  ups_server:
+    build: ./docker_ups/
+    command: bash -c "sleep 10; go run /go/src/main.go" #    to ensure the database is ready to listen before trying to connect to it
+#    command: bash -c "sleep 5; go run /go/src/database_utils/postgres_utils.go" # test database utils
+    ports:
+      - "10000:23333"
+    expose:
+      - "8000"
+    depends_on:
+      - db
+      - server
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./nginx/config:/etc/nginx/conf.d
+    depends_on:
+      - ups_server
+
+###############################amazon#########################################
+#  amazon_server:
+#    build: ./amazon_backend_server
+#    command: bash -c "sleep 5; go run /go/src/main.go" #    to ensure the database is ready to listen before trying to connect to it
+#    depends_on:
+#      - server
+#      - ups_server
+#
+## clean up volume
+## docker volume rm $(docker volume ls -qf dangling=true)
+
+
+

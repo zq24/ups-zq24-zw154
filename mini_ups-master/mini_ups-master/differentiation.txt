@@ -1,0 +1,6 @@
+### _Features_
+
+1. Send email to a user when his package is delivered
+2. Signup and Login page is implemented such that a user is able to lookup all his packages in a single page rather than inputing track number one by one.
+3. Create customized Cookie and Session in Go which are able to maintain the state of the user. Simply speaking, if we don't logout manually, the account will be login automatically next time when we access the UPS website
+4. Logout automatically if no activity is done in 5 minutes
